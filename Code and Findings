@@ -1,0 +1,86 @@
+
+library(MASS)
+data("birthwt")
+head(birthwt)
+
+#do not do barcharts for continuous variables
+barplot(table(birthwt$age))
+hist(birthwt$age) #hist is for continous variables
+barplot(table(birthwt$bwt))
+hist(birthwt$bwt)
+table(birthwt$low)
+barplot(table(birthwt$low),
+        names.arg = c("Not Low","Low"))
+
+table(birthwt$low,birthwt$smoke)
+table(birthwt$smoke,birthwt$low)
+barplot(table(birthwt$smoke,birthwt$low),
+        names.arg = c("Not Low","Low"),col=c(3,2))
+legend("topright",legend = c("Non-smoker","Smoker"),
+       fill=c(3,2))
+
+barplot(table(birthwt$low,birthwt$smoke),
+        names.arg =c("Non-smoker","Smoker"),col=c(3,2))
+legend("topright",legend = c("Not Low","Low"),
+       fill=c(3,2))
+
+addmargins(table(birthwt$low,birthwt$smoke))
+table(birthwt$low,birthwt$smoke)
+
+addmargins(table(birthwt$low,birthwt$smoke))
+prop.table(table(birthwt$low,birthwt$smoke),2)
+str(birthwt)
+mydata<-birthwt
+help(factor)
+mydata$low<-factor(mydata$low,labels=c("Normal","Low"))
+mydata$smoke<-factor(mydata$smoke,labels=c("Non-smoker","Smoker"))
+mydata$race<-factor(mydata$race,labels=c("white","black","other" ))
+
+
+
+barplot(table(mydata$low,mydata$smoke),col=c(3:2))
+legend("topright",legend = c("Not Low","Low"),
+       fill=c(3,2))
+
+
+addmargins(table(mydata$low,mydata$race))
+prop.table(table(mydata$low,mydata$race),2)
+barplot(table(mydata$low,mydata$race),
+        beside = TRUE,col=c(3,2) )
+legend("topright",legend = c("Not Low","Low"),
+       fill=c(3,2))
+
+addmargins(table(mydata$low,mydata$smoke,mydata$race))
+#for white mothers: prop of low births non-smokers= 4/44
+#where as  prop of low births smokers= 19/52 (4 times)
+#for black mothers: prop of low births non-smokers= 5/16
+#where as  prop of low births smokers= 6/10 (double)
+#for other mothers: prop of low births non-smokers= 20/55
+#where as  prop of low births smokers= 5/12 (very similar)
+#therefore the difference in proportions very depending on mothers race
+addmargins(table(mydata$low,mydata$smoke,mydata$ht))
+#for mothers without hypertension: prop of low births non-smokers= 25/108
+#where as  prop of low births smokers= 27/69  (1.5 times it)
+#for mothers with hypertension: prop of low births non-smokers= 4/7
+#where as  prop of low births smokers= 3/5  (similar)
+#less of a difference here between proportions when considering ht
+#but still a notable difference for mothers without ht and whether they smoke or not
+
+addmargins(table(mydata$low,mydata$smoke,mydata$ui))
+#for mothers without ui: prop of low births non-smokers= 22/100
+#where as  prop of low births smokers= 23/61  (1.5 times it)
+#for mothers with ui: prop of low births non-smokers= 7/15
+#where as  prop of low births smokers= 7/13  (similar)
+#less of a difference here between proportions when considering ui
+#but still a notable difference for mothers without ui and whether they smoke or not
+
+
+boxplot(mydata$bwt~mydata$smoke+mydata$race, ylab="Weight (g)")
+
+boxplot(mydata$bwt~mydata$race+mydata$smoke, ylab="Weight (g)")
+dev.off()
+pairs(~bwt+lwt+age,data=birthwt,col=birthwt$race,pch=16, oma=c(3,3,3,12))
+par(xpd = TRUE)
+legend("right",legend=c("white","black","other"), fill=birthwt$race)
+
+dev.off()
